@@ -1,23 +1,43 @@
 package com.example.lab5_group60;
 
-public class Product {
-    String name;
-    double price;
+/**
+ * Created by Miguel Garzón on 2017-05-07.
+ */
 
-    public Product(String name, double price) {
-        this.name = name;
-        this.price = price;
+public class Product {
+    private String _id;
+    private String _productname;
+    private double _price;
+
+    public Product() {
+    }
+    public Product(String id, String productname, double price) {
+        _id = id;
+        _productname = productname;
+        _price = price;
+    }
+    public Product(String productname, double price) {
+        _productname = productname;
+        _price = price;
     }
 
-    public void setName(String name) {
-        this.name = name; }
-
-    public String getName() {
-        return name; }
-
+    public void setId(String id) {
+        _id = id;
+    }
+    public String getId() {
+        return _id;
+    }
+    public void setProductName(String productname) {
+        _productname = productname;
+    }
+    public String getProductName() {
+        return _productname;
+    }
     public void setPrice(double price) {
-        this.price = price; }
-
+        _price = price;
+    }
     public double getPrice() {
-        return price; }
+        return _price;
+    }
 }
+

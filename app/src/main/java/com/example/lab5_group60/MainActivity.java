@@ -1,5 +1,6 @@
 package com.example.lab5_group60;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,7 +13,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listViewProducts;
 
     List<Product> products;
+    DatabaseReference databaseProducts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +53,35 @@ public class MainActivity extends AppCompatActivity {
                 addProduct();
             }
         });
+        databaseProducts = FirebaseDatabase.getInstance().getReference("products");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        databaseProducts.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                products.clear();
+                //iterate through all of the nodes
+                for (DataSnapshot postSnapshot : snapshot.getChildren())
+                {
+                    //get Product
+                    Product product = postSnapshot.getValue(Product.class);
+                    //add products to list of products
+                    products.add(product);
+                }
+                //creating Adaptor
+                ProductList productsAdapter = new ProductList(MainActivity.this, products);
+                //attaching adapter to listview
+                listViewProducts.setAdapter(productsAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
 
@@ -99,6 +134,34 @@ public class MainActivity extends AppCompatActivity {
 
     private void addProduct() {
 
-        Toast.makeText(this, "NOT IMPLEMENTED YET", Toast.LENGTH_LONG).show();
+        //getting values to save
+        String name2;
+        name2 = name.getText().toString().trim();
+        Double price2;
+        price2 = Double.parseDouble(String.valueOf(price.getText().toString()));
+        //check boxes for content
+        if (!TextUtils.isEmpty(name2))
+        //if customer inputs values
+        {
+            //getting unique id using push().getKey() method
+            //it will create a unique id and we will use it as the Primary Key for our Product
+            String id = databaseProducts.push().getKey();
+            //create Product Object
+            Product product = new Product(id,name2,price2);
+            //Save Product
+            databaseProducts.child(id).setValue(product);
+
+            //setting both edittexts to blank again
+            name.setText("");
+            price.setText("");
+            //display success message
+            Toast.makeText(this, "Product added", Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(this, "Please enter a name", Toast.LENGTH_LONG).show();
+        }
+
+
     }
 }
