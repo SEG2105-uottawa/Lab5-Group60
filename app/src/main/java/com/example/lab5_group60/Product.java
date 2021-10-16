@@ -5,11 +5,11 @@ package com.example.lab5_group60;
  */
 
 public class Product {
-<<<<<<< HEAD
+
     private String _id;
     private String _productname;
     private double _price;
-=======
+
     String name;
     double price;
     String id;
@@ -19,7 +19,6 @@ public class Product {
         this.price = price;
         this.id = id;
     }
->>>>>>> 019acae25cff97d9d67076b8dbe87dfaeef17351
 
     public Product() {
     }
@@ -34,7 +33,7 @@ public class Product {
     }
 
     public void setId(String id) {
-<<<<<<< HEAD
+
         _id = id;
     }
     public String getId() {
@@ -46,7 +45,7 @@ public class Product {
     public String getProductName() {
         return _productname;
     }
-=======
+
         this.id = id; }
 
     public String getId() {
@@ -58,7 +57,7 @@ public class Product {
     public String getName() {
         return name; }
 
->>>>>>> 019acae25cff97d9d67076b8dbe87dfaeef17351
+
     public void setPrice(double price) {
         _price = price;
     }
